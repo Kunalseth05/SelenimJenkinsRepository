@@ -34,6 +34,7 @@ public class Common {
   static ExtentTest test = new ExtentTest(Common.class.getName(), "test");
   static JavascriptExecutor js = (JavascriptExecutor)driver;
   
+  private void demo() {}
 //  @BeforeClass
 //	public void startest() 
 //	{
