@@ -154,9 +154,12 @@ public class Common {
 		{
 			test.log(LogStatus.FAIL, test.addScreenCapture(capture(driver))+"Entered Number is not registered");
 		}
+		driver.quit();
 	}
 	
-	public static void readexceldata() {}
+	public void closebrowser() {
+		driver.quit();
+	}
   @AfterClass
 	public void endtest() 
 	{
