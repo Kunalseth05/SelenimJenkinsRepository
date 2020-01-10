@@ -71,7 +71,7 @@ public class SearchPageTest extends Common
 			
 		test.log(LogStatus.FAIL,test.addScreenCapture(capture(driver))+"Buy now option is present");
 		}
-		removecartvalue();
+		//removecartvalue();
 	}
 	
 }

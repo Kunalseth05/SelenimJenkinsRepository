@@ -110,7 +110,7 @@ public class Common {
 	
 	public int checkcartvalue()
 	{
-		int cartval =Integer.parseInt(driver.findElement(By.xpath(Locators.cartvalue)).getText());
+		int cartval =Integer.parseInt(driver.findElement(By.xpath(Locators.cartvalue)).getAttribute("Value"));
 		System.out.println("Cart value contains "+cartval+" values");
 		return cartval;
 		
@@ -141,33 +141,22 @@ public class Common {
 			driver.findElement(By.xpath(Locators.loginpassword)).sendKeys("Kunalseth@0912");
 			driver.findElement(By.xpath(Locators.loginbtn)).click();
 			driver.manage().timeouts().implicitlyWait(3,TimeUnit.SECONDS);
-			try {
-				boolean disp = driver.findElement(By.xpath(Locators.incorrectpassmsg)).isDisplayed();
-				System.out.println(disp);
-				
-				
-				
-			if(disp)
+			if(driver.getTitle().equalsIgnoreCase(Locators.deliverytitle))
 			{
-				test.log(LogStatus.FAIL,test.addScreenCapture(capture(driver))+"User is entering Wrong credential");
-				System.out.println("Hi");
-				driver.quit();
+				test.log(LogStatus.PASS,test.addScreenCapture(capture(driver))+"User is able to Login successfully ");
 			}
 			
 			else	
 			{
-				test.log(LogStatus.PASS,test.addScreenCapture(capture(driver))+"User is able to Login successfully ");
-			}
-			}catch (NoSuchElementException e) {
-				System.out.println(e);
-				// TODO: handle exception
+				test.log(LogStatus.FAIL,test.addScreenCapture(capture(driver))+"User is entering Wrong credential");
+				driver.quit();
 			}
 		}
 		else
 		{
 			test.log(LogStatus.FAIL, test.addScreenCapture(capture(driver))+"Entered Number is not registered");
 		}
-		driver.quit();
+		//driver.quit();
 	}
 	
 	public void closebrowser() {

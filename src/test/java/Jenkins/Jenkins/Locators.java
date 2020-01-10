@@ -13,6 +13,6 @@ public class Locators {
 	public static String continuebtn = "//input[@id='continue']";
 	public static String loginpassword = "//input[@id='ap_password']";
 	public static String loginbtn = "//input[@id='signInSubmit']";
-	public static String incorrectpassmsg = "//span[contains(text(),'Your password is incorrect')]";
+	public static String deliverytitle = "Select a delivery address";
 	
 }
