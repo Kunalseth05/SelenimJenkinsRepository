@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
@@ -45,7 +46,7 @@ public class Common {
   @BeforeTest
   
   public void LaunchBrowser() throws InterruptedException, IOException {
-	  report = new ExtentReports("E:\\Kunal WorkSpace\\Jenkins\\ExtentReport.html",true);
+	  report = new ExtentReports("C:\\Users\\kunal.seth\\test\\SelenimJenkinsRepository\\ExtentReport.html",true);
 		test = report.startTest("Start Demo");
 	  System.setProperty("webdriver.chrome.driver","E:\\Kunal WorkSpace\\ChromeDriver\\chromedriver_win32\\chromedriver.exe");
 	  driver = new ChromeDriver();
@@ -140,14 +141,26 @@ public class Common {
 			driver.findElement(By.xpath(Locators.loginpassword)).sendKeys("Kunalseth@0912");
 			driver.findElement(By.xpath(Locators.loginbtn)).click();
 			driver.manage().timeouts().implicitlyWait(3,TimeUnit.SECONDS);
-			if(driver.findElement(By.xpath(Locators.incorrectpassmsg)).isDisplayed())
+			try {
+				boolean disp = driver.findElement(By.xpath(Locators.incorrectpassmsg)).isDisplayed();
+				System.out.println(disp);
+				
+				
+				
+			if(disp)
 			{
 				test.log(LogStatus.FAIL,test.addScreenCapture(capture(driver))+"User is entering Wrong credential");
+				System.out.println("Hi");
 				driver.quit();
 			}
+			
 			else	
 			{
 				test.log(LogStatus.PASS,test.addScreenCapture(capture(driver))+"User is able to Login successfully ");
+			}
+			}catch (NoSuchElementException e) {
+				System.out.println(e);
+				// TODO: handle exception
 			}
 		}
 		else
