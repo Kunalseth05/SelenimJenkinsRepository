@@ -3,9 +3,7 @@ package Jenkins.Jenkins;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
@@ -16,26 +14,28 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.remote.server.DriverFactory;
-import org.testng.Assert;
+import org.openqa.selenium.interactions.Actions;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
-public class Common {
+import ConfigFile.Propertiesfile;
+//import com.sn.testcases.casemanagement.DataProviderClass;
+
+public class Common extends Excel{
   static WebDriver driver;
   String url= "";
   static ExtentReports report;
   static ExtentTest test = new ExtentTest(Common.class.getName(), "test");
   static JavascriptExecutor js = (JavascriptExecutor)driver;
   
-  
+  public  String username;
+  public  String password;
 //  @BeforeClass
 //	public void startest() 
 //	{
@@ -45,13 +45,22 @@ public class Common {
 	
   @BeforeTest
   
-  public void LaunchBrowser() throws InterruptedException, IOException {
+  public void LaunchBrowser() throws Exception {
 	  report = new ExtentReports("C:\\Users\\kunal.seth\\test\\SelenimJenkinsRepository\\ExtentReport.html",true);
 		test = report.startTest("Start Demo");
-	  System.setProperty("webdriver.chrome.driver","E:\\Kunal WorkSpace\\ChromeDriver\\chromedriver_win32\\chromedriver.exe");
-	  driver = new ChromeDriver();
+	  
+	  
+	  if(Propertiesfile.readpropertiesfile("browser").equals("Chrome")) {
+		  System.setProperty("webdriver.chrome.driver","E:\\Kunal WorkSpace\\ChromeDriver\\chromedriver_win32\\chromedriver.exe");
+		  driver = new ChromeDriver();
+		  System.out.println("Browser=" + Propertiesfile.readpropertiesfile("browser").toString());
+	  }
+	  
 	  String Expectedurl = "Amazon.com: Online Shopping for Electronics, Apparel, Computers, Books, DVDs & more";
-	  driver.get("https://www.amazon.in/");
+	//  String[][] str = readexcel("URL");
+	  //System.out.println(str);
+	  driver.get(Propertiesfile.readpropertiesfile("appURL"));
+	  //driver.get("https://www.amazon.in/");
 	  String Actualtitle = driver.getTitle();
 	  System.out.println(Actualtitle);
 	  System.out.println("Beofre Assertion"+ Expectedurl + Actualtitle );
@@ -71,7 +80,7 @@ public class Common {
 	  //report.flush();
   }
   
-
+  
 
   	public String capture(WebDriver driver2) throws IOException {
 	  TakesScreenshot scrshot = (TakesScreenshot)driver;
@@ -125,43 +134,45 @@ public class Common {
 		}
 		else {
 			test.log(LogStatus.PASS, test.addScreenCapture(capture(driver))+"Cart contains more than one item");
-			driver.findElement(By.xpath(Locators.proceedtobuy)).click();
+			click("Proceed to Buy",By.xpath(Locators.proceedtobuy));
+			//driver.findElement(By.xpath(Locators.proceedtobuy)).click();
 			
 		}
 	}
 	
-	public void loginintoapp() throws IOException
+	
+	
+	
+	public void click(String elementname, By btnname) 
 	{
-		driver.findElement(By.xpath(Locators.loginid)).sendKeys("7045073486");
-		driver.findElement(By.xpath(Locators.continuebtn)).click();
-		driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
-		if(driver.findElement(By.xpath(Locators.loginpassword)).isDisplayed())
+		try {
+		driver.findElement(btnname).click();
+		System.out.println("Element "+elementname+" got cliked successfully");
+		}catch(Exception e)
 		{
-			test.log(LogStatus.PASS, test.addScreenCapture(capture(driver))+"Password option is enable");
-			driver.findElement(By.xpath(Locators.loginpassword)).sendKeys("Kunalseth@0912");
-			driver.findElement(By.xpath(Locators.loginbtn)).click();
-			driver.manage().timeouts().implicitlyWait(3,TimeUnit.SECONDS);
-			if(driver.getTitle().equalsIgnoreCase(Locators.deliverytitle))
-			{
-				test.log(LogStatus.PASS,test.addScreenCapture(capture(driver))+"User is able to Login successfully ");
-			}
-			
-			else	
-			{
-				test.log(LogStatus.FAIL,test.addScreenCapture(capture(driver))+"User is entering Wrong credential");
-				driver.quit();
-			}
+			System.out.println("Not able to click on Element "+elementname);
 		}
-		else
+		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+	}
+	
+	public void dbclick(String elementname, By btnname) {
+		Actions action = new Actions(driver);
+		WebElement elelocator = driver.findElement(btnname);
+		action.doubleClick(elelocator).perform();
+		try {
+			System.out.println("Element "+elementname+" got cliked successfully");
+		}catch(Exception e)
 		{
-			test.log(LogStatus.FAIL, test.addScreenCapture(capture(driver))+"Entered Number is not registered");
+			System.out.println("Not able to click on Element "+elementname);
 		}
-		//driver.quit();
+		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 	}
 	
 	public void closebrowser() {
 		driver.quit();
 	}
+	
+	
   @AfterClass
 	public void endtest() 
 	{

@@ -14,17 +14,19 @@ import com.relevantcodes.extentreports.LogStatus;
 
 
 
-public class SearchPageTest extends Common
+public class SearchPageTest extends Login
 {
+	private static final String String = null;
 	@Test(priority=1)
 	public void searchitem() throws IOException
 	{
-		
-		driver.findElement(By.xpath(Locators.searchtextbox)).click();
+		click("Search Text Box",By.xpath(Locators.searchtextbox));
+		//driver.findElement(By.xpath(Locators.searchtextbox)).click();
 		driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
 		driver.findElement(By.xpath(Locators.searchtextbox)).sendKeys("bajaj press");
 		driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
-		driver.findElement(By.xpath(Locators.clickongotbn)).click();
+		click("Go to button",By.xpath(Locators.clickongotbn));
+		//driver.findElement(By.xpath(Locators.clickongotbn)).click();
 		driver.manage().timeouts().implicitlyWait(4, TimeUnit.SECONDS);
 		String expectedtitle = "Amazon.in: bajaj press";
 		String actualtitle = driver.getTitle();
@@ -39,11 +41,12 @@ public class SearchPageTest extends Common
 		}
 	}
 	@Test(priority=2)
-	public void clickonsearchitem() throws IOException 
+	public void clickonsearchitem() throws Exception 
 	{
 		
 		scrolldown();
-		driver.findElement(By.xpath(Locators.clickonsearchitem)).click();
+		click("Search Item",By.xpath(Locators.clickonsearchitem));
+		//driver.findElement(By.xpath(Locators.clickonsearchitem)).click();
 		driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
 		String oldtab = driver.getWindowHandle();
 		ArrayList<String> newtab = new ArrayList<String>(driver.getWindowHandles());
@@ -53,12 +56,14 @@ public class SearchPageTest extends Common
 		if(driver.findElement(By.xpath(Locators.clickonbuynowbtn)).isDisplayed())
 		{
 			test.log(LogStatus.PASS,test.addScreenCapture(capture(driver))+"Buy now option is present");
-			driver.findElement(By.xpath(Locators.clickonbuynowbtn)).click();
+			click("Buy Now", By.xpath(Locators.clickonbuynowbtn));
+			//driver.findElement(By.xpath(Locators.clickonbuynowbtn)).click();
 			String signintitle = "Amazon Sign In";
 			if(driver.getTitle().equalsIgnoreCase(signintitle))
 			{
 				test.log(LogStatus.INFO,"User need to Login before buying an selected item");
-				loginintoapp();
+				loginintoapp(username, password);
+				
 			}
 			else
 			{
