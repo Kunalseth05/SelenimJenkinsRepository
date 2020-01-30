@@ -29,11 +29,12 @@ import ConfigFile.Propertiesfile;
 
 public class Common extends Excel{
   static WebDriver driver;
-  String url= "";
+  String url= "ksdkas";
   static ExtentReports report;
   static ExtentTest test = new ExtentTest(Common.class.getName(), "test");
   static JavascriptExecutor js = (JavascriptExecutor)driver;
-  
+  public static String cartvalue = "//span[contains(text(),'Cart')]/..//span[@id='nav-cart-count']";
+  public static String proceedtobuy = "//a[contains(text(),' Proceed to Buy')][1]";
   public  String username;
   public  String password;
 //  @BeforeClass
@@ -60,6 +61,7 @@ public class Common extends Excel{
 	//  String[][] str = readexcel("URL");
 	  //System.out.println(str);
 	  driver.get(Propertiesfile.readpropertiesfile("appURL"));
+	  driver.manage().window().maximize();
 	  //driver.get("https://www.amazon.in/");
 	  String Actualtitle = driver.getTitle();
 	  System.out.println(Actualtitle);
@@ -117,9 +119,11 @@ public class Common extends Excel{
 		}
 	}
 	
+	
+	
 	public int checkcartvalue()
 	{
-		int cartval =Integer.parseInt(driver.findElement(By.xpath(Locators.cartvalue)).getAttribute("Value"));
+		int cartval =Integer.parseInt(driver.findElement(By.xpath(Common.cartvalue)).getAttribute("Value"));
 		System.out.println("Cart value contains "+cartval+" values");
 		return cartval;
 		
@@ -134,7 +138,7 @@ public class Common extends Excel{
 		}
 		else {
 			test.log(LogStatus.PASS, test.addScreenCapture(capture(driver))+"Cart contains more than one item");
-			click("Proceed to Buy",By.xpath(Locators.proceedtobuy));
+			click("Proceed to Buy",By.xpath(Common.proceedtobuy));
 			//driver.findElement(By.xpath(Locators.proceedtobuy)).click();
 			
 		}
