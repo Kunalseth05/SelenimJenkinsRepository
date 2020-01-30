@@ -29,7 +29,7 @@ import ConfigFile.Propertiesfile;
 
 public class Common extends Excel{
   static WebDriver driver;
-  String url= "ksdkas";
+  String url= "";
   static ExtentReports report;
   static ExtentTest test = new ExtentTest(Common.class.getName(), "test");
   static JavascriptExecutor js = (JavascriptExecutor)driver;
