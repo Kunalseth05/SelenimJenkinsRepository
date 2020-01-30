@@ -50,7 +50,7 @@ public class Common extends Excel{
 	  report = new ExtentReports("C:\\Users\\kunal.seth\\test\\SelenimJenkinsRepository\\ExtentReport.html",true);
 		test = report.startTest("Start Demo");
 	  
-	  
+	  System.out.println("Hi");
 	  if(Propertiesfile.readpropertiesfile("browser").equals("Chrome")) {
 		  System.setProperty("webdriver.chrome.driver","E:\\Kunal WorkSpace\\ChromeDriver\\chromedriver_win32\\chromedriver.exe");
 		  driver = new ChromeDriver();
